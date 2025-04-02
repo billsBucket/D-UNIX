@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting...</title>
+  <script>
+    // Simple navigation helper - redirects to the requested page
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const target = urlParams.get('to');
+
+      if (target) {
+        window.location.href = `/${target}`;
+      } else {
+        window.location.href = '/';
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>
