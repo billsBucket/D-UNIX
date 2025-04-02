@@ -1,0 +1,368 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'MonospaceFont';
+  src: url('/fonts/FiraCode-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* Light mode colors */
+    --background: 0 0% 96%;
+    --foreground: 0 0% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
+
+    --primary: 0 0% 15%;
+    --primary-foreground: 0 0% 96%;
+
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 15%;
+
+    --muted: 0 0% 85%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 15%;
+
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 96%;
+
+    --positive: 135 60% 40%;
+    --positive-foreground: 0 0% 96%;
+
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+    --ring: 0 0% 60%;
+
+    --radius: 0px;
+
+    --chart-1: 210 100% 50%;
+    --chart-2: 270 100% 45%;
+    --chart-3: 50 100% 40%;
+    --chart-4: 0 100% 45%;
+    --chart-5: 140 100% 40%;
+  }
+
+  .dark {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 90%;
+
+    --card: 0 0% 3%;
+    --card-foreground: 0 0% 90%;
+
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 90%;
+
+    --primary: 0 0% 90%;
+    --primary-foreground: 0 0% 2%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 90%;
+
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 90%;
+
+    --positive: 135 60% 40%;
+    --positive-foreground: 0 0% 90%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 40%;
+
+    --radius: 0px;
+
+    --chart-1: 210 100% 60%;
+    --chart-2: 270 100% 60%;
+    --chart-3: 50 100% 50%;
+    --chart-4: 0 100% 60%;
+    --chart-5: 140 100% 50%;
+  }
+}
+
+/* Mobile-first approach - Base styles are for mobile */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Improved scrollbars for desktop */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted) / 0.2);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted) / 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted) / 0.4);
+  }
+}
+
+/* Prevents horizontal overflow */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Utility class for component styles */
+@layer components {
+  /* Terminal styling */
+  .terminal-bg {
+    @apply fixed top-0 left-0 w-full h-full overflow-y-auto p-2 md:p-4 z-0;
+    background-color: hsl(var(--background));
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .terminal-message {
+    font-size: 10px;
+    line-height: 1.2;
+    color: hsl(var(--foreground) / 0.7);
+    @apply md:text-xs;
+  }
+
+  .system-boot-message {
+    color: hsl(240 80% 70% / 0.7);
+  }
+
+  .dex-boot-message {
+    color: hsl(120 100% 70% / 0.7);
+  }
+
+  /* Loading screen */
+  .loading-screen {
+    @apply fixed inset-0 flex items-center justify-center z-50;
+    background-color: hsl(var(--background));
+  }
+
+  .loading-container {
+    @apply text-center p-6 md:p-8 w-[90%] md:w-96 max-w-full;
+  }
+
+  .loading-progress-bar {
+    @apply w-full h-1 my-2;
+    background-color: hsl(var(--muted) / 0.5);
+  }
+
+  .loading-progress-fill {
+    @apply h-full transition-all duration-300;
+    background-color: hsl(var(--primary));
+  }
+
+  .loading-system-text {
+    @apply text-xs mt-4;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .loading-indicator {
+    @apply w-8 h-8 md:w-10 md:h-10 rounded-full mx-auto;
+    border: 2px solid hsl(var(--muted) / 0.5);
+    border-top-color: hsl(var(--primary) / 0.8);
+    animation: spin 1.5s linear infinite;
+  }
+
+  /* D-UNIX Main UI Components */
+  .dunix-card {
+    @apply border p-3 md:p-4 mb-4;
+    border-color: hsl(var(--border) / 0.1);
+    background-color: hsl(var(--card));
+  }
+
+  /* Input styling that works in both light and dark mode */
+  .dunix-input {
+    @apply border rounded-none h-10 px-3 py-2 text-sm;
+    color: hsl(var(--foreground));
+    background-color: transparent;
+    border-color: hsl(var(--border) / 0.2);
+  }
+
+  .dunix-input:focus {
+    @apply outline-none ring-1;
+    border-color: hsl(var(--ring));
+    ring-color: hsl(var(--ring));
+  }
+
+  /* Mobile specific adjustments */
+  .mobile-scroll-container {
+    @apply overflow-x-auto pb-2 -mx-3 px-3;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .mobile-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  /* Responsive tables */
+  .responsive-table {
+    @apply w-full overflow-x-auto md:overflow-x-visible;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .responsive-table-inner {
+    @apply min-w-full md:w-full;
+  }
+
+  /* Responsive chart containers */
+  .chart-container {
+    @apply w-full overflow-hidden;
+    min-height: 200px;
+  }
+
+  /* Responsive grid layouts */
+  .grid-layout-main {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4;
+  }
+
+  .grid-layout-analytics {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4;
+  }
+
+  /* Animation keyframes */
+  @keyframes slideInFromTop {
+    0% {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0.8;
+    }
+  }
+
+  .animate-in {
+    animation-duration: 150ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: both;
+  }
+
+  .fade-in-80 {
+    animation-name: fadeIn;
+  }
+
+  .slide-in-from-top-5 {
+    animation-name: slideInFromTop;
+  }
+}
+
+/* Scanlines effect - only in dark mode */
+.dark .terminal-scanlines {
+  @apply fixed inset-0 z-0 pointer-events-none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 100% 3px;
+  opacity: 0.3;
+}
+
+/* Animation keyframes */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Additional D-UNIX styles */
+.positive-text {
+  @apply text-[#4caf50] dark:text-[#4caf50];
+}
+
+.negative-text {
+  @apply text-[#f44336] dark:text-[#f44336];
+}
+
+.network-status {
+  @apply inline-flex items-center gap-1;
+}
+
+.network-status::before {
+  content: "";
+  @apply inline-block w-2 h-2 rounded-full mr-1;
+}
+
+.network-status.online::before {
+  @apply bg-green-500;
+}
+
+.network-status.offline::before {
+  @apply bg-red-500;
+}
+
+.network-status.connecting::before {
+  @apply bg-yellow-500 animate-pulse;
+}
+
+/* Original animation for the terminal effect - only in dark mode */
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.dark .text-glow {
+  animation: textGlow 2s infinite;
+}
+
+/* Light/Dark mode transitions */
+.transition-colors,
+.transition-all {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
